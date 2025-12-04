@@ -1,11 +1,9 @@
-# 📌 Punto de Reorden (ROP) en análisis de inventario usando la CDFE, Bootstrap y simulación Monte Carlo: una alternativa no paramétrica
-
-> **Modelado predictivo de ventas semanales usando series de tiempo tabulares del dataset de Walmart (Kaggle).**  
+**Modelado predictivo de ventas semanales usando series de tiempo tabulares del dataset (Kaggle).**  
 > Incluye construcción de rezagos, codificación categórica, selección de variables, comparación de modelos y evaluación con split temporal.
 
 ---
 
-# 📁 Contenido
+# Contenido
 
 - [Descripción general](#descripción-general)  
 - [Objetivos](#objetivos)  
@@ -21,7 +19,7 @@
 
 ---
 
-# 📄 Descripción general
+# Descripción general
 
 Este proyecto realiza un análisis y modelado predictivo de las **ventas semanales de Walmart**, utilizando el dataset público de Kaggle.  
 
@@ -31,19 +29,19 @@ El objetivo principal es **evaluar la capacidad predictiva** de diferentes enfoq
 
 ---
 
-# 🎯 Objetivos
+# Objetivos
 
 1. Explorar y limpiar el dataset.  
 2. Construir variables relevantes, especialmente **lags** por tienda y departamento.  
 3. Implementar un **split temporal** correcto para evitar fuga de información.  
-4. Comparar modelos predictivos con un **baseline naïve**.  
-5. Evaluar el desempeño con métricas formales (MSE, MAE, R²).  
+4. Comparar modelos predictivos con un **baseline naive**.  
+5. Evaluar el desempeño con métricas formales (MSE, MAE, $R^2$).  
 6. Visualizar resultados y analizar residuales.  
 7. Determinar si los modelos avanzados aportan valor frente al baseline.
 
 ---
 
-# 📊 Dataset
+# Dataset
 
 Dataset: **Walmart Recruiting – Store Sales Forecasting (Kaggle)**.
 
@@ -58,7 +56,7 @@ Incluye:
 
 ---
 
-# ⚙️ Metodología
+# Metodología
 
 ### 1. Integración de Datasets
 Se combinan `train.csv`, `features.csv` y `stores.csv`.
@@ -94,7 +92,7 @@ Se emplea **CatBoostEncoder**, ideal para modelos tabulares con alta cardinalida
 
 ### 7. Split temporal
 
-El dataset se divide de forma **cronológica** (80% train, 20% test), evitando leakage.
+El dataset se divide de forma **cronológica** (80 % train, 20 % test), evitando leakage.
 
 ### 8. Modelos probados
 - Baseline naïve  
@@ -105,7 +103,7 @@ El dataset se divide de forma **cronológica** (80% train, 20% test), evitando l
 
 ---
 
-# 🛠️ Preprocesamiento
+# Preprocesamiento
 
 - Conversión de `IsHoliday` a entero  
 - Imputación de MarkDowns faltantes  
@@ -115,7 +113,7 @@ El dataset se divide de forma **cronológica** (80% train, 20% test), evitando l
 
 ---
 
-# 🧩 Ingeniería de características
+# Ingeniería de características
 
 Tras la selección de variables, las features más relevantes fueron:
 
@@ -134,11 +132,11 @@ Esto mejora parsimonia y reduce colinealidad.
 
 ---
 
-# 🤖 Modelos
+# Modelos
 
 | Modelo | Descripción |
 |--------|-------------|
-| **Naïve baseline** | Predice usando `WS_lag(1)`; sirve como referencia mínima. |
+| **Naive baseline** | Predice usando `WS_lag(1)`; sirve como referencia mínima. |
 | **Linear Regression** | Modelo lineal básico. |
 | **Elastic Net** | Combina L1 y L2 para controlar colinealidad. |
 | **XGBoost** | Captura patrones no lineales y efectos complejos. |
@@ -146,49 +144,47 @@ Esto mejora parsimonia y reduce colinealidad.
 
 ---
 
-# 📈 Resultados
+# Resultados
 
-(Valores demostrativos — reemplaza según tus resultados exactos)
-
-| Método | MSE | MAE | R² |
+| Método | MSE | MAE | $R^2$ |
 |--------|------|-------|--------|
-| Naïve baseline | XXXX | XXXX | 0.91 |
-| Linear Regression | XXXX | XXXX | 0.92 |
-| Elastic Net | XXXX | XXXX | 0.92 |
-| **XGB Regressor** | **menor MSE** | **menor MAE** | **0.96+** |
-| LightGBM | similar a XGB | — | — |
+| Naïve baseline | 35552116 | 1536 | 0.9065 |
+| Linear Regression | 8340234 | 1178 | 0.9781 |
+| Elastic Net | 8340236 | 1178 | 0.9781 |
+| XGB Regressor (TS split) | 7642042 | 1012 | 0.9799 |
+| LightGBM | 8715853 | 1115 | 0.9771 |
 
 **Conclusión:**  
 El modelo **XGB** supera ampliamente al baseline y a los modelos lineales, capturando mejor la dinámica temporal.
 
 ---
 
-# 🖼️ Gráficas
+# Gráficas
 
 Incluye:
 
-### ✔️ Serie de tiempo real vs predicho (XGB)
+### Serie de tiempo real vs predicho (XGB)
 Muestra cómo el modelo sigue la tendencia de ventas en semanas regulares y picos.
 
-### ✔️ Residuales del modelo
+### Residuales del modelo
 Permite evaluar sesgos, dispersión e identificar outliers o semanas atípicas.
 
-### ✔️ Ventas reales vs predichas agregadas por semana
+### Promedio de ventas reales vs predichas agregadas por semana
 Evaluación corporativa del error global.
 
 ---
 
-# 🧠 Conclusiones
+# Conclusiones
 
-1. La serie presenta **estacionalidad semanal y anual**, con poca tendencia.  
+1. La serie presenta estacionalidad anual.  
 2. Los modelos lineales tienen limitaciones por colinealidad y falta de interacciones.  
-3. El baseline naïve es fuerte, pero **XGB lo supera claramente**, justificando su uso.  
-4. El error relativo agregado es **<1%**, indicando alta capacidad predictiva.  
+3. El baseline naïve es fuerte, pero XGB lo supera claramente, justificando su uso.  
+4. El error relativo agregado es <1 %, indicando alta capacidad predictiva.  
 5. El pipeline desarrollado es adecuado para forecasting en retail y puede escalarse.
 
 ---
 
-# 🚀 Mejoras futuras
+# Mejoras futuras
 
 - Implementar **TimeSeriesSplit** para validación más robusta.  
 - Crear **rolling features** (medias móviles, desviaciones, máximos).  
@@ -199,13 +195,13 @@ Evaluación corporativa del error global.
 
 ---
 
-# 📌 Licencia
+# Licencia
 
 MIT License.
 
 ---
 
-# 🧑‍💻 Autor
+# Autor
 
 **Orión Nava**  
 Data Analyst & Applied Machine Learning  
