@@ -45,6 +45,8 @@ El objetivo principal es **evaluar la capacidad predictiva** de diferentes enfoq
 
 Dataset: **Walmart Recruiting – Store Sales Forecasting (Kaggle)**.
 
+https://www.kaggle.com/datasets/aslanahmedov/walmart-sales-forecast/code
+
 Incluye:
 
 - Ventas semanales (`Weekly_Sales`)
